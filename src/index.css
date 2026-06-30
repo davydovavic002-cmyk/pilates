@@ -186,25 +186,7 @@ html[data-embed='portfolio'] .layout-main {
 
 html[data-embed='portfolio'] .layout-footer--embed {
   margin-bottom: 0;
-  background: transparent;
   flex-shrink: 0;
-}
-
-html[data-embed='portfolio'] .layout-footer--embed .layout-footer-inner {
-  padding-top: 1.25rem !important;
-  padding-bottom: 1rem !important;
-}
-
-html[data-embed='portfolio'] .layout-footer {
-  margin-bottom: 0;
-  padding-bottom: 0;
-  background: transparent;
-  flex-shrink: 0;
-}
-
-html[data-embed='portfolio'] .layout-footer-inner {
-  padding-top: 1.75rem !important;
-  padding-bottom: 1.25rem !important;
 }
 
 html[data-embed='portfolio'] .embed-page {
