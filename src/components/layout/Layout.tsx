@@ -295,7 +295,11 @@ export function Layout() {
   }, [location.pathname, location.hash, embed]);
 
   return (
-    <div className="layout-root min-h-screen bg-dreamy-gradient relative overflow-x-hidden">
+    <div
+      className={`layout-root bg-dreamy-gradient relative overflow-x-hidden ${
+        embed ? 'h-auto' : 'min-h-screen'
+      }`}
+    >
       <PortfolioEmbedBridge />
       {!embed && <FloralLayer />}
       <Navigation />

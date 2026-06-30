@@ -139,7 +139,7 @@
 html[data-embed='portfolio'],
 html[data-embed='portfolio'] body,
 html[data-embed='portfolio'] #root {
-  min-height: auto !important;
+  min-height: 0 !important;
   height: auto !important;
   overflow-x: hidden;
   overflow-y: visible;
@@ -154,9 +154,18 @@ html[data-embed='portfolio'] #root {
   );
 }
 
-html[data-embed='portfolio'] .layout-root {
+html[data-embed='portfolio'] .min-h-screen,
+html[data-embed='portfolio'] [class*='min-h-['] {
   min-height: auto !important;
-  height: auto;
+}
+
+html[data-embed='portfolio'] [class*='h-['][class*='vh'] {
+  height: auto !important;
+}
+
+html[data-embed='portfolio'] .layout-root {
+  min-height: 0 !important;
+  height: auto !important;
   display: block;
 }
 
@@ -177,12 +186,20 @@ html[data-embed='portfolio'] .layout-main {
 
 html[data-embed='portfolio'] .layout-footer {
   margin-bottom: 0;
+  padding-bottom: 0;
   background: transparent;
+  flex-shrink: 0;
 }
 
 html[data-embed='portfolio'] .layout-footer-inner {
   padding-top: 1.75rem !important;
-  padding-bottom: 1.75rem !important;
+  padding-bottom: 1.25rem !important;
+}
+
+html[data-embed='portfolio'] .embed-page {
+  opacity: 1;
+  min-height: 0 !important;
+  height: auto !important;
 }
 
 html[data-embed='portfolio'] section {
@@ -228,10 +245,6 @@ html[data-embed='portfolio'] .embed-sticky-off {
 
 html[data-embed='portfolio'] .floral-layer-global {
   display: none;
-}
-
-html[data-embed='portfolio'] .embed-page {
-  opacity: 1;
 }
 
 html[data-embed='portfolio'] .schedule-embed-section {

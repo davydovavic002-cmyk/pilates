@@ -40,8 +40,8 @@ export function PortfolioEmbedBridge() {
     window.addEventListener('load', notify);
     const cancelDelays = schedulePortfolioHeightReports(notify);
 
-    const root = document.getElementById('root');
-    const observed = [document.documentElement, document.body, root].filter(Boolean) as Element[];
+    const shell = document.querySelector('.layout-root');
+    const observed = [shell, document.getElementById('root')].filter(Boolean) as Element[];
 
     const resizeObserver = new ResizeObserver(notify);
     observed.forEach((node) => resizeObserver.observe(node));

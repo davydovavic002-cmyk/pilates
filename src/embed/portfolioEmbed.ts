@@ -29,20 +29,29 @@ export function withEmbedParams(path: string): string {
   return `${pathname}?${qs}${hash}`;
 }
 
+export function measurePortfolioContentHeight(): number {
+  const shell =
+    document.querySelector<HTMLElement>('.layout-root') ??
+    document.getElementById('root');
+
+  if (!shell) return 0;
+
+  // Content height only — never offsetHeight on html/body (iframe viewport inflates it).
+  let height = shell.scrollHeight;
+
+  const last = shell.lastElementChild;
+  if (last instanceof HTMLElement) {
+    const bottom = last.getBoundingClientRect().bottom + window.scrollY;
+    height = Math.max(height, bottom);
+  }
+
+  return Math.ceil(height);
+}
+
 export function postPortfolioContentHeight(): void {
   if (document.documentElement.getAttribute('data-embed') !== 'portfolio') return;
 
-  const root = document.getElementById('root');
-  const height = Math.ceil(
-    Math.max(
-      document.documentElement.scrollHeight,
-      document.documentElement.offsetHeight,
-      document.body.scrollHeight,
-      document.body.offsetHeight,
-      root?.scrollHeight ?? 0,
-      root?.offsetHeight ?? 0,
-    ),
-  );
+  const height = measurePortfolioContentHeight();
 
   window.parent.postMessage({ type: 'portfolio:content-height', height }, '*');
 }
