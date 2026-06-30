@@ -10,9 +10,13 @@ const iframeHeaders = {
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
+    port: 5173,
+    host: true,
     headers: iframeHeaders,
   },
   preview: {
+    port: 5173,
+    host: true,
     headers: iframeHeaders,
   },
 })
