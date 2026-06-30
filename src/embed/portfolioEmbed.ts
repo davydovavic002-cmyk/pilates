@@ -29,29 +29,74 @@ export function withEmbedParams(path: string): string {
   return `${pathname}?${qs}${hash}`;
 }
 
+/** Bottom marker — only reliable height source in a sized iframe. */
+export function getEmbedHeightSentinel(): HTMLElement | null {
+  return document.getElementById('embed-height-sentinel');
+}
+
 export function measurePortfolioContentHeight(): number {
-  const shell =
-    document.querySelector<HTMLElement>('.layout-root') ??
-    document.getElementById('root');
-
-  if (!shell) return 0;
-
-  // Content height only — never offsetHeight on html/body (iframe viewport inflates it).
-  let height = shell.scrollHeight;
-
-  const last = shell.lastElementChild;
-  if (last instanceof HTMLElement) {
-    const bottom = last.getBoundingClientRect().bottom + window.scrollY;
-    height = Math.max(height, bottom);
+  const sentinel = getEmbedHeightSentinel();
+  if (sentinel) {
+    const docTop = document.documentElement.getBoundingClientRect().top;
+    return Math.ceil(sentinel.getBoundingClientRect().bottom - docTop);
   }
 
-  return Math.ceil(height);
+  const shell = document.querySelector<HTMLElement>('.layout-root');
+  if (!shell) return 0;
+
+  let maxBottom = 0;
+  const docTop = document.documentElement.getBoundingClientRect().top;
+  shell.querySelectorAll<HTMLElement>('header, main, footer, section').forEach((el) => {
+    const rect = el.getBoundingClientRect();
+    if (rect.height > 0) {
+      maxBottom = Math.max(maxBottom, rect.bottom - docTop);
+    }
+  });
+
+  return Math.ceil(maxBottom || shell.getBoundingClientRect().height);
+}
+
+let lastPostedHeight = 0;
+
+export function resetPortfolioHeightCache(): void {
+  lastPostedHeight = 0;
+}
+
+function lockEmbedDocumentHeight(height: number): void {
+  const px = `${height}px`;
+
+  for (const el of [document.documentElement, document.body]) {
+    el.style.height = px;
+    el.style.minHeight = '0';
+    el.style.maxHeight = px;
+    el.style.overflow = 'hidden';
+  }
+
+  const root = document.getElementById('root');
+  if (root) {
+    root.style.height = px;
+    root.style.minHeight = '0';
+    root.style.maxHeight = px;
+    root.style.overflow = 'hidden';
+  }
+
+  const shell = document.querySelector<HTMLElement>('.layout-root');
+  if (shell) {
+    shell.style.minHeight = '0';
+    shell.style.maxHeight = px;
+    shell.style.height = 'auto';
+    shell.style.overflow = 'hidden';
+  }
 }
 
 export function postPortfolioContentHeight(): void {
   if (document.documentElement.getAttribute('data-embed') !== 'portfolio') return;
 
-  const height = measurePortfolioContentHeight();
+  const height = Math.max(measurePortfolioContentHeight(), 1);
+  if (height === lastPostedHeight) return;
+
+  lastPostedHeight = height;
+  lockEmbedDocumentHeight(height);
 
   window.parent.postMessage({ type: 'portfolio:content-height', height }, '*');
 }

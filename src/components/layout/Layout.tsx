@@ -320,7 +320,14 @@ export function Layout() {
           </AnimatePresence>
         )}
       </main>
-      {!isHome && !isLegal && <Footer />}
+      {!isHome && !isLegal && !embed && <Footer />}
+      {embed && (
+        <div
+          id="embed-height-sentinel"
+          className="embed-height-sentinel block h-0 w-full overflow-hidden pointer-events-none"
+          aria-hidden="true"
+        />
+      )}
     </div>
   );
 }

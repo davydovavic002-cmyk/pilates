@@ -8,6 +8,7 @@ import { MagneticButton } from '../components/ui/MagneticButton';
 import { Footer } from '../components/layout/Footer';
 import { useBooking } from '../context/BookingContext';
 import { useNavigate } from 'react-router-dom';
+import { isPortfolioEmbed } from '../embed/portfolioEmbed';
 
 export function HomePage() {
   const { showBooked } = useBooking();
@@ -45,7 +46,7 @@ export function HomePage() {
         </div>
       </Section>
 
-      <Footer />
+      {!isPortfolioEmbed() && <Footer />}
     </>
   );
 }

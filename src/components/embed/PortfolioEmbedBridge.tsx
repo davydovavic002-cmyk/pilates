@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import {
+  getEmbedHeightSentinel,
   isPortfolioEmbed,
   postPortfolioContentHeight,
+  resetPortfolioHeightCache,
   schedulePortfolioHeightReports,
 } from '../../embed/portfolioEmbed';
 
@@ -18,6 +20,7 @@ export function PortfolioEmbedBridge() {
       raf = requestAnimationFrame(() => postPortfolioContentHeight());
     };
 
+    resetPortfolioHeightCache();
     notify();
     const cancelDelays = schedulePortfolioHeightReports(notify);
 
@@ -31,32 +34,38 @@ export function PortfolioEmbedBridge() {
     if (!isPortfolioEmbed()) return;
 
     let raf = 0;
+    let debounce = 0;
     const notify = () => {
       cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => postPortfolioContentHeight());
+      raf = requestAnimationFrame(() => {
+        window.clearTimeout(debounce);
+        debounce = window.setTimeout(() => postPortfolioContentHeight(), 32);
+      });
     };
 
     notify();
     window.addEventListener('load', notify);
+    window.addEventListener('resize', notify);
     const cancelDelays = schedulePortfolioHeightReports(notify);
 
-    const shell = document.querySelector('.layout-root');
-    const observed = [shell, document.getElementById('root')].filter(Boolean) as Element[];
-
+    const sentinel = getEmbedHeightSentinel();
+    const main = document.querySelector('main.layout-main');
     const resizeObserver = new ResizeObserver(notify);
-    observed.forEach((node) => resizeObserver.observe(node));
+    if (main) resizeObserver.observe(main);
+    if (sentinel) resizeObserver.observe(sentinel);
 
     const mutationObserver = new MutationObserver(notify);
     mutationObserver.observe(document.body, {
       childList: true,
       subtree: true,
       attributes: true,
-      characterData: true,
     });
 
     return () => {
       cancelAnimationFrame(raf);
+      window.clearTimeout(debounce);
       window.removeEventListener('load', notify);
+      window.removeEventListener('resize', notify);
       cancelDelays();
       resizeObserver.disconnect();
       mutationObserver.disconnect();

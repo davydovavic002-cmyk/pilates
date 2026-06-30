@@ -2,6 +2,7 @@ import { Link, useParams, Navigate } from 'react-router-dom';
 import { legalDocuments, legalLinks } from '../data/legal';
 import { STUDIO } from '../data/images';
 import { Footer } from '../components/layout/Footer';
+import { isPortfolioEmbed } from '../embed/portfolioEmbed';
 
 export function LegalPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -46,7 +47,7 @@ export function LegalPage() {
           </ul>
         </nav>
       </article>
-      <Footer />
+      {!isPortfolioEmbed() && <Footer />}
     </>
   );
 }
