@@ -3,8 +3,34 @@ import { SectionFlorals } from '../ui/FloralDecor';
 import { MagneticButton } from '../ui/MagneticButton';
 import { STUDIO } from '../../data/images';
 import { legalLinks } from '../../data/legal';
+import { withEmbedParams } from '../../embed/portfolioEmbed';
 
-export function Footer() {
+interface FooterProps {
+  compact?: boolean;
+}
+
+export function Footer({ compact = false }: FooterProps) {
+  if (compact) {
+    return (
+      <footer className="layout-footer layout-footer--embed relative border-t border-misty/30 overflow-hidden">
+        <div className="layout-footer-inner relative z-10 max-w-7xl mx-auto px-6 py-5">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-center sm:text-left">
+            <p className="font-serif text-lg text-laurel-deep">{STUDIO.name}</p>
+            <address className="not-italic text-sm text-laurel/75 leading-relaxed">
+              {STUDIO.address}, {STUDIO.city}
+            </address>
+            <a
+              href={`tel:${STUDIO.phoneHref}`}
+              className="text-sm text-laurel/75 hover:text-laurel-deep transition-colors"
+            >
+              {STUDIO.phone}
+            </a>
+          </div>
+        </div>
+      </footer>
+    );
+  }
+
   return (
     <footer className="layout-footer relative border-t border-misty/30 bg-cream/80 backdrop-blur-sm overflow-hidden">
       <SectionFlorals variant="footer" />
@@ -43,7 +69,7 @@ export function Footer() {
                 Sat 9:00–16:00
               </p>
             </div>
-            <MagneticButton to="/schedule" variant="ghost">
+            <MagneticButton to={withEmbedParams('/schedule')} variant="ghost">
               View Schedule
             </MagneticButton>
           </div>
@@ -57,7 +83,7 @@ export function Footer() {
             {legalLinks.map((link) => (
               <Link
                 key={link.to}
-                to={link.to}
+                to={withEmbedParams(link.to)}
                 className="text-[11px] tracking-[0.08em] text-laurel/45 hover:text-laurel-deep transition-colors"
               >
                 {link.label}

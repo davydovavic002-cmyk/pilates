@@ -4,7 +4,6 @@ import {
   getEmbedHeightSentinel,
   isPortfolioEmbed,
   postPortfolioContentHeight,
-  resetPortfolioHeightCache,
   schedulePortfolioHeightReports,
 } from '../../embed/portfolioEmbed';
 
@@ -20,7 +19,6 @@ export function PortfolioEmbedBridge() {
       raf = requestAnimationFrame(() => postPortfolioContentHeight());
     };
 
-    resetPortfolioHeightCache();
     notify();
     const cancelDelays = schedulePortfolioHeightReports(notify);
 
