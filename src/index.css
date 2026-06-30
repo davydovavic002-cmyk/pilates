@@ -243,6 +243,16 @@ html[data-embed='portfolio'] .floral-layer-global {
 html[data-embed='portfolio'] .schedule-embed-section {
   padding-top: 1.5rem !important;
   padding-bottom: 1.25rem !important;
+  min-height: 0 !important;
+}
+
+html[data-embed='portfolio'] .layout-root:has(.schedule-embed-section) {
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+html[data-embed='portfolio'] .layout-root:has(.schedule-embed-section) .layout-footer--embed {
+  margin-top: 0 !important;
 }
 
 html[data-embed='portfolio'] .schedule-embed-notebook {

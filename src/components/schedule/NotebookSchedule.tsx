@@ -15,6 +15,7 @@ import { BookingFormModal, type BookingFormData } from '../ui/BookingFormModal';
 import { useBooking } from '../../context/BookingContext';
 import { PricingHint } from './PricingHint';
 import { suggestPricing } from '../../utils/pricingSuggestion';
+import { isPortfolioEmbed } from '../../embed/portfolioEmbed';
 
 interface SavedNote {
   id: string;
@@ -81,13 +82,17 @@ export function NotebookSchedule() {
     return s ? `${s.planName} — ${s.totalLabel}${s.savings ? ` · ${s.savings}` : ''}` : undefined;
   })();
 
+  const embed = isPortfolioEmbed();
+
   return (
     <Section
       eyebrow="Your planner"
       title="Weekly schedule"
       subtitle="Tap + to add a class to My Practice, then book when you're ready"
       align="center"
-      className="schedule-embed-section pb-24 lg:pb-32 embed-section-last"
+      className={`schedule-embed-section embed-section-last ${
+        embed ? 'pb-0' : 'pb-24 lg:pb-32'
+      }`}
     >
       <BookingFormModal
         open={formOpen}
@@ -101,7 +106,11 @@ export function NotebookSchedule() {
         <div className="relative">
           <SectionFlorals variant="schedule" />
           <div className="schedule-embed-notebook bg-dotted-paper floral-border rounded-2xl lg:rounded-3xl shadow-dreamy overflow-hidden">
-            <div className="embed-flow-min-h flex flex-col lg:flex-row min-h-[560px] lg:min-h-[640px]">
+            <div
+              className={`embed-flow-min-h flex flex-col lg:flex-row ${
+                embed ? '' : 'min-h-[560px] lg:min-h-[640px]'
+              }`}
+            >
               <div className="flex-1 p-6 lg:p-10 lg:border-r border-misty/25">
                 <div className="flex items-center justify-between gap-4 mb-8">
                   <div>
@@ -172,7 +181,11 @@ export function NotebookSchedule() {
 
           <PricingHint classCount={saved.length} />
 
-          <div className="embed-flow-min-h min-h-[240px] lg:min-h-[400px] rounded-xl p-4 space-y-3 border border-dashed border-misty/45">
+          <div
+            className={`embed-flow-min-h rounded-xl p-4 space-y-3 border border-dashed border-misty/45 ${
+              embed ? 'min-h-0' : 'min-h-[240px] lg:min-h-[400px]'
+            }`}
+          >
             <AnimatePresence mode="popLayout">
               {saved.length === 0 ? (
                 <motion.p

@@ -1,72 +1,69 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import {
+  bindPortfolioImageLoadReports,
   getEmbedHeightSentinel,
   isPortfolioEmbed,
-  postPortfolioContentHeight,
-  schedulePortfolioHeightReports,
+  MOUNT_HEIGHT_DELAYS_MS,
+  reportPortfolioContentHeight,
+  ROUTE_HEIGHT_DELAYS_MS,
+  scheduleHeightReports,
+  setupPortfolioLanguageListener,
 } from '../../embed/portfolioEmbed';
+
+function createHeightNotifier() {
+  let raf = 0;
+  return () => {
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => reportPortfolioContentHeight());
+  };
+}
 
 export function PortfolioEmbedBridge() {
   const location = useLocation();
 
   useEffect(() => {
     if (!isPortfolioEmbed()) return;
-
-    let raf = 0;
-    const notify = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => postPortfolioContentHeight());
-    };
-
-    notify();
-    const cancelDelays = schedulePortfolioHeightReports(notify);
-
-    return () => {
-      cancelAnimationFrame(raf);
-      cancelDelays();
-    };
-  }, [location.pathname, location.hash]);
+    return setupPortfolioLanguageListener(() => {
+      // Reserved for future i18n wiring from portfolio parent.
+    });
+  }, []);
 
   useEffect(() => {
     if (!isPortfolioEmbed()) return;
 
-    let raf = 0;
-    let debounce = 0;
-    const notify = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        window.clearTimeout(debounce);
-        debounce = window.setTimeout(() => postPortfolioContentHeight(), 32);
-      });
+    const notify = createHeightNotifier();
+    notify();
+    const cancelDelays = scheduleHeightReports(notify, ROUTE_HEIGHT_DELAYS_MS);
+
+    return () => {
+      cancelDelays();
     };
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!isPortfolioEmbed()) return;
+
+    const notify = createHeightNotifier();
 
     notify();
     window.addEventListener('load', notify);
     window.addEventListener('resize', notify);
-    const cancelDelays = schedulePortfolioHeightReports(notify);
+
+    const cancelDelays = scheduleHeightReports(notify, MOUNT_HEIGHT_DELAYS_MS);
+    const unbindImages = bindPortfolioImageLoadReports(notify);
 
     const sentinel = getEmbedHeightSentinel();
-    const main = document.querySelector('main.layout-main');
     const resizeObserver = new ResizeObserver(notify);
-    if (main) resizeObserver.observe(main);
+    resizeObserver.observe(document.body);
     if (sentinel) resizeObserver.observe(sentinel);
 
-    const mutationObserver = new MutationObserver(notify);
-    mutationObserver.observe(document.body, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-    });
-
     return () => {
-      cancelAnimationFrame(raf);
-      window.clearTimeout(debounce);
       window.removeEventListener('load', notify);
       window.removeEventListener('resize', notify);
       cancelDelays();
+      unbindImages();
       resizeObserver.disconnect();
-      mutationObserver.disconnect();
     };
   }, []);
 

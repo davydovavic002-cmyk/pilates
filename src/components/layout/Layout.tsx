@@ -268,6 +268,8 @@ export function Layout() {
     if (params.get('embed') === 'portfolio') return;
 
     params.set('embed', 'portfolio');
+    const lang = new URLSearchParams(window.location.search).get('lang');
+    if (lang) params.set('lang', lang);
     navigate(
       { pathname: location.pathname, hash: location.hash, search: `?${params.toString()}` },
       { replace: true },
