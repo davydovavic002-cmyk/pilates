@@ -7,16 +7,19 @@ const iframeHeaders = {
   'Content-Security-Policy': 'frame-ancestors *',
 }
 
+const allowedHosts = ['pilates.neostudio.space', 'localhost']
+
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  server: {
-    port: 5173,
-    host: true,
-    headers: iframeHeaders,
-  },
   preview: {
     port: 5173,
     host: true,
+    allowedHosts,
+    headers: iframeHeaders,
+  },
+  server: {
+    host: true,
+    allowedHosts,
     headers: iframeHeaders,
   },
 })
