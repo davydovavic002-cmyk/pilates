@@ -91,7 +91,7 @@ export function PricingSection() {
           </ul>
         </div>
 
-        <aside className="glass rounded-2xl p-5 lg:p-6 lg:sticky lg:top-28 self-start w-full">
+        <aside className="embed-sticky-off glass rounded-2xl p-5 lg:p-6 lg:sticky lg:top-28 self-start w-full">
           <h3 className="font-serif text-xl text-laurel-deep mb-2">First visit?</h3>
           <p className="text-xs text-laurel/75 leading-relaxed mb-4">
             New here? Try <strong className="text-laurel-deep">Intro Bloom</strong> — 3 classes for €60,

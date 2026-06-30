@@ -101,7 +101,7 @@ export function NotebookSchedule() {
         <div className="relative">
           <SectionFlorals variant="schedule" />
           <div className="bg-dotted-paper floral-border rounded-2xl lg:rounded-3xl shadow-dreamy overflow-hidden">
-            <div className="flex flex-col lg:flex-row min-h-[560px] lg:min-h-[640px]">
+            <div className="embed-flow-min-h flex flex-col lg:flex-row min-h-[560px] lg:min-h-[640px]">
               <div className="flex-1 p-6 lg:p-10 lg:border-r border-misty/25">
                 <div className="flex items-center justify-between gap-4 mb-8">
                   <div>
@@ -123,7 +123,7 @@ export function NotebookSchedule() {
                   </select>
                 </div>
 
-                <div className="space-y-2 max-h-[480px] lg:max-h-[520px] overflow-y-auto pr-1 scrollbar-thin">
+                <div className="embed-scroll-cap space-y-2 max-h-[480px] lg:max-h-[520px] overflow-y-auto pr-1 scrollbar-thin">
                   {filtered.map((item, index) => (
                     <ScheduleCard
                       key={item.id}
@@ -165,14 +165,14 @@ export function NotebookSchedule() {
 
         <motion.aside
           layout
-          className="glass rounded-2xl lg:rounded-3xl p-6 lg:p-8 sticky top-28"
+          className="embed-sticky-off glass rounded-2xl lg:rounded-3xl p-6 lg:p-8 sticky top-28"
         >
           <h2 className="font-serif text-2xl text-laurel-deep">My Practice</h2>
           <p className="text-xs text-laurel/55 mt-1 mb-4">Saved classes</p>
 
           <PricingHint classCount={saved.length} />
 
-          <div className="min-h-[240px] lg:min-h-[400px] rounded-xl p-4 space-y-3 border border-dashed border-misty/45">
+          <div className="embed-flow-min-h min-h-[240px] lg:min-h-[400px] rounded-xl p-4 space-y-3 border border-dashed border-misty/45">
             <AnimatePresence mode="popLayout">
               {saved.length === 0 ? (
                 <motion.p

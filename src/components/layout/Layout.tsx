@@ -11,6 +11,7 @@ import { PageTransition } from '../ui/MotionWrappers';
 import { FloralLayer } from '../ui/FloralDecor';
 
 import { Footer } from './Footer';
+import { PortfolioEmbedBridge } from '../embed/PortfolioEmbedBridge';
 
 
 
@@ -246,7 +247,7 @@ export function Navigation() {
 
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
 
-      className="fixed top-0 inset-x-0 z-50 px-4 lg:px-8 py-4 lg:py-5"
+      className="layout-nav fixed top-0 inset-x-0 z-50 px-4 lg:px-8 py-4 lg:py-5"
 
     >
 
@@ -444,13 +445,15 @@ export function Layout() {
 
   return (
 
-    <div className="min-h-screen bg-dreamy-gradient relative overflow-x-hidden">
+    <div className="layout-root min-h-screen bg-dreamy-gradient relative overflow-x-hidden">
+
+      <PortfolioEmbedBridge />
 
       <FloralLayer />
 
       <Navigation />
 
-      <main className={`relative z-[2] ${isHome ? 'pt-20 lg:pt-24' : 'pt-20 lg:pt-28'}`}>
+      <main className={`layout-main relative z-[2] ${isHome ? 'pt-20 lg:pt-24' : 'pt-20 lg:pt-28'}`}>
 
         <AnimatePresence mode="wait">
 

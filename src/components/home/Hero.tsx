@@ -28,7 +28,7 @@ export function Hero() {
 
   return (
     <section className="relative overflow-hidden">
-      <div className="relative w-full h-[42vh] sm:h-[48vh] lg:h-[58vh] -mt-20 lg:-mt-24">
+      <div className="hero-viewport-media relative w-full h-[42vh] sm:h-[48vh] lg:h-[58vh] -mt-20 lg:-mt-24">
         <HeroMedia />
         <SectionFlorals variant="hero" />
         <div className="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-cream to-transparent pointer-events-none" />

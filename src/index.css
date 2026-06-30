@@ -134,3 +134,53 @@
     border-radius: 4px;
   }
 }
+
+/* Portfolio iframe embed (?embed=portfolio) */
+html[data-embed='portfolio'] {
+  height: auto;
+}
+
+html[data-embed='portfolio'] body {
+  min-height: 0;
+  height: auto;
+  overflow-y: visible;
+}
+
+html[data-embed='portfolio'] .layout-root {
+  min-height: auto;
+}
+
+html[data-embed='portfolio'] .layout-nav {
+  display: none;
+}
+
+html[data-embed='portfolio'] .layout-main {
+  padding-top: 0 !important;
+}
+
+html[data-embed='portfolio'] .hero-viewport-media {
+  height: auto;
+  aspect-ratio: 16 / 10;
+  max-height: 22rem;
+  margin-top: 0;
+}
+
+@media (min-width: 640px) {
+  html[data-embed='portfolio'] .hero-viewport-media {
+    max-height: 26rem;
+  }
+}
+
+html[data-embed='portfolio'] .embed-flow-min-h {
+  min-height: auto !important;
+}
+
+html[data-embed='portfolio'] .embed-scroll-cap {
+  max-height: none !important;
+  overflow-y: visible !important;
+}
+
+html[data-embed='portfolio'] .embed-sticky-off {
+  position: static !important;
+  top: auto !important;
+}

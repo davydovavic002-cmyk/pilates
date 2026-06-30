@@ -7,6 +7,9 @@ import { SchedulePage } from './pages/SchedulePage';
 import { LegalPage } from './pages/LegalPage';
 import { BookingProvider } from './context/BookingContext';
 import './index.css';
+import { applyPortfolioEmbedAttribute } from './embed/portfolioEmbed';
+
+applyPortfolioEmbedAttribute();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

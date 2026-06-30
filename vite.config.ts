@@ -3,8 +3,8 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 const iframeHeaders = {
-  // Allow embedding in iframes on any origin (no X-Frame-Options: DENY)
-  'Content-Security-Policy': 'frame-ancestors *',
+  'Content-Security-Policy':
+    "frame-ancestors 'self' https://neostudio.space https://*.neostudio.space http://localhost:* https://localhost:*",
 }
 
 const allowedHosts = ['pilates.neostudio.space', 'localhost']
