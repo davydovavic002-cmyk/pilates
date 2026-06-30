@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import type { ClassItem } from '../../data/schedule';
+import { isPortfolioEmbed } from '../../embed/portfolioEmbed';
 
 interface ScheduleCardProps {
   item: ClassItem;
@@ -14,12 +15,14 @@ export function ScheduleCard({
   isSaved = false,
   onAdd,
 }: ScheduleCardProps) {
+  const embed = isPortfolioEmbed();
+
   return (
     <motion.div
-      layout
-      initial={{ opacity: 0, x: -8 }}
+      layout={!embed}
+      initial={embed ? false : { opacity: 0, x: -8 }}
       animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: index * 0.03, duration: 0.35 }}
+      transition={{ delay: embed ? 0 : index * 0.03, duration: embed ? 0 : 0.35 }}
       className={`
         group flex items-center gap-4 lg:gap-5 p-4 lg:px-5 lg:py-4 rounded-xl
         bg-cream/70 hover:bg-misty/25 transition-colors duration-300

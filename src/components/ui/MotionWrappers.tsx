@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import type { ReactNode } from 'react';
+import { isPortfolioEmbed } from '../../embed/portfolioEmbed';
 
 interface GlassCardProps {
   children: ReactNode;
@@ -51,6 +52,10 @@ export function FadeIn({
 }
 
 export function PageTransition({ children }: { children: ReactNode }) {
+  if (isPortfolioEmbed()) {
+    return <div className="embed-page">{children}</div>;
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}

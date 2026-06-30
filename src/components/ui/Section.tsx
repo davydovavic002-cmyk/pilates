@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import type { ReactNode } from 'react';
+import { isPortfolioEmbed } from '../../embed/portfolioEmbed';
 
 interface SectionProps {
   id?: string;
@@ -22,16 +23,20 @@ export function Section({
   align = 'center',
   dark = false,
 }: SectionProps) {
+  const embed = isPortfolioEmbed();
   const alignClass = align === 'center' ? 'text-center mx-auto' : 'text-left';
 
   return (
     <section id={id} className={`relative py-20 lg:py-28 px-6 lg:px-8 ${className}`}>
       <div className="max-w-7xl mx-auto">
         <motion.header
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          initial={embed ? false : { opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          {...(!embed && {
+            whileInView: { opacity: 1, y: 0 },
+            viewport: { once: true, margin: '-80px' },
+          })}
+          transition={{ duration: embed ? 0 : 0.7, ease: [0.22, 1, 0.36, 1] }}
           className={`mb-12 lg:mb-16 max-w-2xl ${alignClass} ${align === 'center' ? '' : ''}`}
         >
           {eyebrow && (

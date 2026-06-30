@@ -103,7 +103,7 @@ export function FloralLayer() {
 
   return (
     <>
-      <div className="fixed inset-0 pointer-events-none z-[1] overflow-hidden opacity-70 sm:opacity-100" aria-hidden>
+      <div className="floral-layer-global fixed inset-0 pointer-events-none z-[1] overflow-hidden opacity-70 sm:opacity-100" aria-hidden>
         {global.map((f, i) => (
           <FloralAccent key={i} type={f.type} className={f.className} size={f.size} delay={f.delay} />
         ))}

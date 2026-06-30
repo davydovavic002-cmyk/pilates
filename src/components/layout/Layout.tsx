@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Outlet } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -6,7 +6,7 @@ import { PageTransition } from '../ui/MotionWrappers';
 import { FloralLayer } from '../ui/FloralDecor';
 import { Footer } from './Footer';
 import { PortfolioEmbedBridge } from '../embed/PortfolioEmbedBridge';
-import { isPortfolioEmbed } from '../../embed/portfolioEmbed';
+import { isPortfolioEmbed, withEmbedParams } from '../../embed/portfolioEmbed';
 
 const links = [
   { to: '/', label: 'Home', end: true },
@@ -28,7 +28,7 @@ function EmbedCompactNavLinks() {
       {links.map((link) => (
         <NavLink
           key={link.to}
-          to={link.to}
+          to={withEmbedParams(link.to)}
           end={link.end}
           onClick={() => window.scrollTo({ top: 0, behavior: 'auto' })}
           className={({ isActive }) =>
@@ -43,7 +43,7 @@ function EmbedCompactNavLinks() {
       {hashLinks.map((link) => (
         <a
           key={link.href}
-          href={link.href}
+          href={withEmbedParams(link.href)}
           className="shrink-0 px-2 py-1 text-[9px] sm:text-[10px] tracking-[0.08em] uppercase text-laurel/65 hover:text-laurel-deep rounded-full whitespace-nowrap"
         >
           {link.label}
@@ -59,7 +59,7 @@ function DesktopNavLinks() {
       {links.map((link) => (
         <NavLink
           key={link.to}
-          to={link.to}
+          to={withEmbedParams(link.to)}
           end={link.end}
           onClick={() => window.scrollTo({ top: 0, behavior: 'auto' })}
           className={({ isActive }) =>
@@ -85,7 +85,7 @@ function DesktopNavLinks() {
       {hashLinks.map((link) => (
         <a
           key={link.href}
-          href={link.href}
+          href={withEmbedParams(link.href)}
           className="px-4 py-2 text-xs tracking-[0.1em] uppercase text-laurel/65 hover:text-laurel-deep transition-colors rounded-full whitespace-nowrap"
         >
           {link.label}
@@ -103,7 +103,7 @@ function MobileNavLinks({ onNavigate }: { onNavigate: () => void }) {
       {links.map((link) => (
         <NavLink
           key={link.to}
-          to={link.to}
+          to={withEmbedParams(link.to)}
           end={link.end}
           onClick={() => {
             window.scrollTo({ top: 0, behavior: 'auto' });
@@ -121,7 +121,7 @@ function MobileNavLinks({ onNavigate }: { onNavigate: () => void }) {
         return (
           <a
             key={link.href}
-            href={link.href}
+            href={withEmbedParams(link.href)}
             onClick={onNavigate}
             className={`${linkClass} ${
               isActive ? 'bg-misty/50 text-laurel-deep' : 'text-laurel/70 hover:bg-misty/30 hover:text-laurel-deep'
@@ -140,7 +140,7 @@ function EmbedNavigation() {
     <header className="layout-nav static z-10 px-3 py-2">
       <div className="max-w-7xl mx-auto">
         <nav className="layout-nav-inner flex items-center gap-2 glass rounded-full px-2.5 py-1.5 min-w-0">
-          <NavLink to="/" className="group flex items-center gap-1.5 shrink-0 max-w-[42%] min-w-0">
+          <NavLink to={withEmbedParams('/')} className="group flex items-center gap-1.5 shrink-0 max-w-[42%] min-w-0">
             <span className="w-1.5 h-1.5 shrink-0 rounded-full bg-laurel" />
             <span className="font-serif text-xs font-light tracking-wide text-laurel-deep truncate">
               Stretch & Chill
@@ -184,7 +184,7 @@ export function Navigation() {
       <div className="max-w-7xl mx-auto relative">
         <nav className="flex items-center justify-between gap-3 glass rounded-full px-4 sm:px-5 lg:px-8 py-2.5 lg:py-3 min-w-0">
           <NavLink
-            to="/"
+            to={withEmbedParams('/')}
             onClick={() => setMenuOpen(false)}
             className="group flex items-center gap-2 min-w-0 shrink"
           >
@@ -256,9 +256,23 @@ export function Navigation() {
 
 export function Layout() {
   const location = useLocation();
+  const navigate = useNavigate();
   const isHome = location.pathname === '/';
   const isLegal = location.pathname.startsWith('/legal');
   const embed = isPortfolioEmbed();
+
+  useEffect(() => {
+    if (document.documentElement.getAttribute('data-embed') !== 'portfolio') return;
+
+    const params = new URLSearchParams(location.search);
+    if (params.get('embed') === 'portfolio') return;
+
+    params.set('embed', 'portfolio');
+    navigate(
+      { pathname: location.pathname, hash: location.hash, search: `?${params.toString()}` },
+      { replace: true },
+    );
+  }, [location.pathname, location.hash, location.search, navigate]);
 
   useEffect(() => {
     if (embed) return;
@@ -283,18 +297,24 @@ export function Layout() {
   return (
     <div className="layout-root min-h-screen bg-dreamy-gradient relative overflow-x-hidden">
       <PortfolioEmbedBridge />
-      <FloralLayer />
+      {!embed && <FloralLayer />}
       <Navigation />
       <main
         className={`layout-main relative z-[2] ${
           embed ? '' : isHome ? 'pt-20 lg:pt-24' : 'pt-20 lg:pt-28'
         }`}
       >
-        <AnimatePresence mode="wait">
+        {embed ? (
           <PageTransition key={location.pathname}>
             <Outlet />
           </PageTransition>
-        </AnimatePresence>
+        ) : (
+          <AnimatePresence mode="wait">
+            <PageTransition key={location.pathname}>
+              <Outlet />
+            </PageTransition>
+          </AnimatePresence>
+        )}
       </main>
       {!isHome && !isLegal && <Footer />}
     </div>

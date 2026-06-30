@@ -87,7 +87,7 @@ export function NotebookSchedule() {
       title="Weekly schedule"
       subtitle="Tap + to add a class to My Practice, then book when you're ready"
       align="center"
-      className="pb-24 lg:pb-32"
+      className="schedule-embed-section pb-24 lg:pb-32 embed-section-last"
     >
       <BookingFormModal
         open={formOpen}
@@ -100,7 +100,7 @@ export function NotebookSchedule() {
       <div className="grid grid-cols-1 xl:grid-cols-[1fr_340px] gap-8 xl:gap-10 items-start">
         <div className="relative">
           <SectionFlorals variant="schedule" />
-          <div className="bg-dotted-paper floral-border rounded-2xl lg:rounded-3xl shadow-dreamy overflow-hidden">
+          <div className="schedule-embed-notebook bg-dotted-paper floral-border rounded-2xl lg:rounded-3xl shadow-dreamy overflow-hidden">
             <div className="embed-flow-min-h flex flex-col lg:flex-row min-h-[560px] lg:min-h-[640px]">
               <div className="flex-1 p-6 lg:p-10 lg:border-r border-misty/25">
                 <div className="flex items-center justify-between gap-4 mb-8">
