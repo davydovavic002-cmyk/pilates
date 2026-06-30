@@ -6,10 +6,10 @@ import { legalLinks } from '../../data/legal';
 
 export function Footer() {
   return (
-    <footer className="relative border-t border-misty/30 bg-cream/80 backdrop-blur-sm overflow-hidden">
+    <footer className="layout-footer relative border-t border-misty/30 bg-cream/80 backdrop-blur-sm overflow-hidden">
       <SectionFlorals variant="footer" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-14 lg:py-16">
+      <div className="layout-footer-inner relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-14 lg:py-16">
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-16">
           <div className="lg:col-span-5">
             <p className="font-serif text-2xl lg:text-3xl text-laurel-deep mb-3">{STUDIO.name}</p>

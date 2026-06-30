@@ -26,7 +26,7 @@ export function HomePage() {
         eyebrow="Ready?"
         title="Your mat is waiting"
         subtitle="Intro offer: three classes for €60. No commitment beyond showing up."
-        className="relative pb-28"
+        className="relative pb-28 embed-section-last"
       >
         <SectionFlorals variant="dense" />
         <div className="relative z-10 flex flex-col sm:flex-row items-center justify-center gap-4">

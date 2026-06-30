@@ -34,7 +34,7 @@ export function Hero() {
         <div className="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-cream to-transparent pointer-events-none" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pb-16 lg:pb-24 pt-8 lg:pt-12 overflow-x-hidden">
+      <div className="hero-content relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pb-16 lg:pb-24 pt-8 lg:pt-12 overflow-x-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           <div className="lg:col-span-7 text-center lg:text-left order-1">
             <motion.p

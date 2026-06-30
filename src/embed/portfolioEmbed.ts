@@ -11,11 +11,22 @@ export function applyPortfolioEmbedAttribute(): void {
 export function postPortfolioContentHeight(): void {
   if (document.documentElement.getAttribute('data-embed') !== 'portfolio') return;
 
-  window.parent.postMessage(
-    {
-      type: 'portfolio:content-height',
-      height: document.documentElement.scrollHeight,
-    },
-    '*',
+  const root = document.getElementById('root');
+  const height = Math.ceil(
+    Math.max(
+      document.documentElement.scrollHeight,
+      document.documentElement.offsetHeight,
+      document.body.scrollHeight,
+      document.body.offsetHeight,
+      root?.scrollHeight ?? 0,
+      root?.offsetHeight ?? 0,
+    ),
   );
+
+  window.parent.postMessage({ type: 'portfolio:content-height', height }, '*');
+}
+
+export function schedulePortfolioHeightReports(callback: () => void): () => void {
+  const timers = [0, 50, 150, 400, 900, 1800].map((ms) => window.setTimeout(callback, ms));
+  return () => timers.forEach(clearTimeout);
 }
